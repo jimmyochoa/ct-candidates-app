@@ -1,15 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
+import TaskList from './TaskList';
+import Login from './Login';
+import { Container, IconButton, Box } from '@mui/material';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 const App = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
+
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsAuthenticated(false);
+  };
+
   return (
-    <div className="app-container" style={{ textAlign: 'center', padding: '20px' }}>
-      <h1 style={{ color: '#4CAF50' }}>Welcome to My React TODO App</h1>
-      <p>This is an enhanced version of the app with some styling and structure changes!</p>
-      <button style={{ padding: '10px 20px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '5px' }}>
-        Add New Task
-      </button>
-    </div>
+    <Container maxWidth={false} disableGutters sx={{ maxHeight: '100vh'}}>
+      {isAuthenticated && (
+        <Box sx={{ position: 'absolute', top: 10, right: 10 }}>
+          <IconButton onClick={handleLogout} color="primary">
+            <ExitToAppIcon />
+          </IconButton>
+        </Box>
+      )}
+
+      {isAuthenticated ? (
+        <TaskList />
+      ) : (
+        <Login onLogin={handleLogin} />
+      )}
+    </Container>
+
   );
 };
 
