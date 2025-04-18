@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
-import TaskList from './TaskList';
-import Login from './Login';
+import TaskList from './js/TaskList';
+import Login from './js/Login';
 import { Container, IconButton, Box } from '@mui/material';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
