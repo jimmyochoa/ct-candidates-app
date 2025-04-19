@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import TaskList from './js/TaskList';
 import Login from './js/Login';
+import Register from './js/Register';
 import { Container, IconButton, Box } from '@mui/material';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
+  const [isRegistering, setIsRegistering] = useState(false);
 
   const handleLogin = () => {
     setIsAuthenticated(true);
@@ -18,7 +20,7 @@ const App = () => {
   };
 
   return (
-    <Container maxWidth={false} disableGutters sx={{ maxHeight: '100vh'}}>
+    <Container maxWidth={false} disableGutters sx={{ maxHeight: '100vh' }}>
       {isAuthenticated && (
         <Box sx={{ position: 'absolute', top: 10, right: 10 }}>
           <IconButton onClick={handleLogout} color="primary">
@@ -29,11 +31,18 @@ const App = () => {
 
       {isAuthenticated ? (
         <TaskList />
+      ) : isRegistering ? (
+        <Register
+          onRegisterSuccess={() => setIsRegistering(false)}
+          onSwitchToLogin={() => setIsRegistering(false)}
+        />
       ) : (
-        <Login onLogin={handleLogin} />
+        <Login
+          onLogin={handleLogin}
+          onSwitchToRegister={() => setIsRegistering(true)}
+        />
       )}
     </Container>
-
   );
 };
 

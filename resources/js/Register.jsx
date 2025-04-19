@@ -2,64 +2,73 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { TextField, Button, Container, Typography, Box, Stack, Alert } from '@mui/material';
 
-const Login = ({ onLogin, onSwitchToRegister }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const Register = ({ onRegisterSuccess, onSwitchToLogin }) => {
+  const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState('');
 
-  const handleLogin = async () => {
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleRegister = async () => {
     try {
-      const response = await axios.post('/api/login', { email, password });
-      localStorage.setItem('token', response.data.token);
-      onLogin();
+      await axios.post('/api/register', form);
+      onRegisterSuccess();
     } catch (err) {
-      setError('Invalid credentials');
+      setError('Failed to register. Make sure the email is not already in use.');
     }
   };
 
   return (
     <Container maxWidth="xs" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 8 }}>
       <Typography variant="h4" gutterBottom color="primary">
-        Login
+        Sign Up
       </Typography>
 
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
       <Box component="form" sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
         <TextField
-          label="Email"
+          label="Name"
+          name="name"
           variant="outlined"
           fullWidth
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          autoComplete="email"
+          value={form.name}
+          onChange={handleChange}
         />
-
+        <TextField
+          label="Email"
+          name="email"
+          variant="outlined"
+          fullWidth
+          value={form.email}
+          onChange={handleChange}
+        />
         <TextField
           label="Password"
-          variant="outlined"
+          name="password"
           type="password"
+          variant="outlined"
           fullWidth
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          autoComplete="current-password"
+          value={form.password}
+          onChange={handleChange}
         />
 
         <Button
           variant="contained"
           color="primary"
-          onClick={handleLogin}
+          onClick={handleRegister}
           sx={{ mt: 2 }}
         >
-          Login
+          Register
         </Button>
       </Box>
 
       <Stack direction="row" justifyContent="center" sx={{ mt: 2 }}>
         <Typography variant="body2" color="textSecondary">
-          Don't have an account?{' '}
-          <Button sx={{ textTransform: 'none' }} color="primary" onClick={onSwitchToRegister}>
-            Sign up
+          Already have an account?{' '}
+          <Button sx={{ textTransform: 'none' }} color="primary" onClick={onSwitchToLogin}>
+            Login
           </Button>
         </Typography>
       </Stack>
@@ -67,4 +76,4 @@ const Login = ({ onLogin, onSwitchToRegister }) => {
   );
 };
 
-export default Login;
+export default Register;
