@@ -2,104 +2,91 @@
 
 This is the setup guide for running the **CT Candidates App**, a project built using **Laravel** (backend), **React**, **MUI**, **Vite.js** (frontend), and **Sanctum** for authentication.
 
+---
+
 ## ⚙️ Prerequisites
 
 - **PHP** (latest version)
 - **Node.js** (v16+)
 - **Git**
 - **Docker** (for PostgreSQL)
-- **PostgreSQL** or **MySQL** (depends on your configuration)
+- **PostgreSQL** or **MySQL** (depending on configuration)
 
-The application can run with **Docker** for PostgreSQL, simplifying the database setup. You can also choose MySQL if preferred.
+The application can run with **Docker** for PostgreSQL, simplifying database setup. You can also choose MySQL if preferred.
 
-### 🧑‍💻 Supported Operating Systems
+---
+
+## 🧑‍💻 Supported Operating Systems
 
 - **Windows**
-- **MacOS**
+- **macOS**
+
+---
+
+## 🖥️ Recommended Hardware Requirements
+
+- **CPU**: Dual-core 2.0 GHz+ (Quad-core recommended)
+- **RAM**: Minimum 8 GB (16 GB recommended for Docker)
+- **Storage**: 2+ GB of free space
+- **OS**: Windows 10+ or macOS 11+ (Intel/Apple Silicon)
 
 ---
 
 ## 🚀 Step-by-Step Installation
 
-### 1. Install **Docker** & **Docker Compose**
+### 1. Install Docker
 
-Docker allows you to run the PostgreSQL database with a single command, simplifying setup.
+#### Windows:
+- Install Docker Desktop: [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
+- Docker Compose comes included.
 
-#### **For Windows:**
-
-1. **Install Docker**:
-   - Download Docker Desktop for Windows: [Download Docker for Windows](https://www.docker.com/products/docker-desktop)
-   - Follow the installation steps.
-
-2. **Install Docker Compose**:
-   - Docker Compose is bundled with Docker Desktop, so you don’t need to install it separately.
-
-#### **For MacOS:**
-
-1. **Install Docker**:
-   - Run this command to install Docker using **Homebrew**:
-     ```bash
-     brew install --cask docker
-     ```
-   - Launch Docker from Applications once installed.
-
-2. **Install Docker Compose**:
-   - Docker Compose comes bundled with Docker Desktop, so no need to install it separately.
+#### macOS:
+- Use Homebrew:
+```bash
+brew install --cask docker
+```
 
 ---
 
-### 2. Install **PHP** (for Laravel)
+### 2. Install PHP
 
-- **For Windows:**
-   - Download the latest **PHP** zip file from [PHP for Windows](https://windows.php.net/download).
-   - Extract the contents to a folder (e.g., `C:\php`).
-   - Add the PHP folder to your system's **Environment Variables**.
-     - Open **System Properties** → **Advanced** → **Environment Variables**.
-     - Under **System Variables**, find **Path** and add `C:\php` to it.
-   - **Activate PHP extensions**: 
-     - Open `php.ini` file (inside the PHP folder) and uncomment (remove the `;`) the lines for the necessary extensions:
-       - For PostgreSQL: Uncomment `extension=pgsql` and `extension=pdo_pgsql`.
-       - For MySQL: Uncomment `extension=mysqli`.
-     - Restart the PHP service or the server after editing `php.ini`.
+#### Windows:
+- Download ZIP from: [https://windows.php.net/download](https://windows.php.net/download)
+- Extract to `C:\php`
+- Add `C:\php` to system PATH (Environment Variables)
+- Enable extensions in `php.ini`:
+```ini
+extension=pgsql
+extension=pdo_pgsql
+; or for MySQL:
+extension=mysqli
+```
 
-- **For MacOS:**
-   - Install PHP using **Homebrew**:
-     ```bash
-     brew install php
-     ```
-   - **Activate PHP extensions** (PostgreSQL or MySQL):
-     - For PostgreSQL, make sure to install `php-pgsql` by running:
-       ```bash
-       brew install php-pgsql
-       ```
-     - For MySQL, install `php-mysqli` by running:
-       ```bash
-       brew install php-mysqli
-       ```
+#### macOS:
+```bash
+brew install php
+brew install php-pgsql   # PostgreSQL
+```
 
 ---
 
-### 3. Install **Node.js** (for React frontend)
+### 3. Install Node.js
 
-- **For Windows & MacOS:**
-   - Download the latest version of **Node.js** from [Node.js official site](https://nodejs.org/).
-   - Follow the installation steps for your system.
-   - After installation, verify the installation by running:
-     ```bash
-     node -v
-     ```
+- Install from [https://nodejs.org/](https://nodejs.org/)
+- Verify:
+```bash
+node -v
+```
 
 ---
 
-### 4. Install **Composer** (PHP Dependency Manager)
+### 4. Install Composer
 
-- **For Windows & MacOS:**
-   - Download **Composer** from [getcomposer.org](https://getcomposer.org/download/).
-   - Follow the installation instructions.
-   - After installation, verify the installation by running:
-     ```bash
-     composer --version
-     ```
+- Download from [https://getcomposer.org/download/](https://getcomposer.org/download/)
+- Verify:
+```bash
+composer --version
+```
 
 ---
 
@@ -112,15 +99,13 @@ cd ct-candidates-app
 
 ---
 
-### 6. Set Up Environment Variables
-
-Copy the example environment file and configure it:
+### 6. Set Up `.env` File
 
 ```bash
 cp .env.example .env
 ```
 
-Edit the `.env` file and make sure to configure the database settings properly:
+Update `.env`:
 
 ```env
 APP_NAME=CT Candidates
@@ -128,9 +113,6 @@ APP_ENV=local
 APP_KEY=base64:uMm3FTa3n950tzEa7CDffuTKpNF1OP5qhtrQVH/aIlU=
 APP_DEBUG=true
 APP_URL=http://localhost
-
-LOG_CHANNEL=stack
-LOG_LEVEL=debug
 
 DB_CONNECTION=pgsql
 DB_HOST=localhost
@@ -140,13 +122,9 @@ DB_USERNAME=postgres
 DB_PASSWORD=your_postgres_password
 ```
 
-> **Note:** Ensure that the `DB_CONNECTION=pgsql` is set for PostgreSQL. If you prefer MySQL, change the `DB_CONNECTION` to `mysql` and configure the relevant `DB_HOST`, `DB_USERNAME`, and `DB_PASSWORD`.
-
 ---
 
-### 7. Generate Laravel Application Key
-
-Run the following command to generate a key for your Laravel app:
+### 7. Generate Laravel Key
 
 ```bash
 php artisan key:generate
@@ -154,15 +132,7 @@ php artisan key:generate
 
 ---
 
-### 8. Run PostgreSQL with Docker (without Docker Compose)
-
-Instead of using a `docker-compose.yml` file, you can run PostgreSQL directly with Docker.
-
-#### **For Windows & MacOS:**
-
-1. **Make sure Docker is running.**
-
-2. **Run PostgreSQL container with a single Docker command:**
+### 8. Run PostgreSQL via Docker
 
 ```bash
 docker run -d \
@@ -174,21 +144,9 @@ docker run -d \
   postgres:latest
 ```
 
-This command does the following:
-
-- `-d`: Runs the container in detached mode.
-- `--name postgres-container`: Names the PostgreSQL container.
-- `-e POSTGRES_PASSWORD=your_postgres_password`: Sets the password for the PostgreSQL user.
-- `-e POSTGRES_USER=postgres`: Sets the username for PostgreSQL.
-- `-e POSTGRES_DB=ct_candidates_app`: Sets the name of the database.
-- `-p 5432:5432`: Maps the local port `5432` to the container's port `5432`.
-- `postgres:latest`: Uses the latest version of the official PostgreSQL image from Docker Hub.
-
 ---
 
-### 9. Run Database Migrations
-
-After setting up your environment and database, run the migrations:
+### 9. Run Migrations
 
 ```bash
 php artisan migrate
@@ -198,17 +156,13 @@ php artisan migrate
 
 ### 10. Install Frontend Dependencies
 
-From the project root, install the required Node.js dependencies:
-
 ```bash
 npm install
 ```
 
 ---
 
-### 11. Compile the Frontend Assets
-
-Compile the frontend assets using Vite:
+### 11. Compile Frontend
 
 ```bash
 npm run dev
@@ -216,42 +170,105 @@ npm run dev
 
 ---
 
-### 12. Run the Laravel Development Server
-
-Now, start the Laravel backend server:
+### 12. Start Laravel Server
 
 ```bash
 php artisan serve
 ```
 
-The backend will be available at `http://127.0.0.1:8000`.
+---
+
+## 📡 API Endpoints (Sanctum Protected)
+
+All authenticated routes require a Bearer token from login.
+
+### 🔐 Auth
+
+- **POST `/register`**
+```json
+{
+  "name": "User",
+  "email": "user@example.com",
+  "password": "secret123"
+}
+```
+
+- **POST `/login`**
+```json
+{
+  "email": "user@example.com",
+  "password": "secret123"
+}
+```
+**Returns:**
+```json
+{
+  "token": "sanctum-token-here"
+}
+```
+
+Use this token for authenticated requests:
+```
+Authorization: Bearer your-token-here
+```
 
 ---
 
-## 🧑‍💻 Useful Commands
+### ✅ Authenticated User
 
-- **Clear application cache:**
+- **GET `/api/user`**
 
+---
+
+### 📋 Tasks
+
+- **GET `/api/tasks`**
+  - Optional query params:
+    - `status=pending`
+    - `orderBy=created_at&direction=desc`
+
+- **POST `/api/tasks`**
+```json
+{
+  "title": "New Task"
+}
+```
+
+- **GET `/api/tasks/{id}`**
+
+- **PUT `/api/tasks/{id}`**
+```json
+{
+  "title": "Updated Task",
+  "status": "completed",
+  "order": 1
+}
+```
+
+- **DELETE `/api/tasks/{id}`**
+
+---
+
+## 🧹 Useful Commands
+
+Clear cache:
 ```bash
 php artisan config:clear
 php artisan route:clear
 php artisan view:clear
 ```
 
-- **Refresh database (⚠️ removes all data):**
-
+Reset database:
 ```bash
 php artisan migrate:fresh --seed
 ```
 
 ---
 
-## 📝 Notes
+## ✅ Tech Stack Summary
 
-- If you encounter issues with the `APP_KEY`, make sure you’ve run `php artisan key:generate`.
-- Docker simplifies PostgreSQL setup; no need to install it manually.
-- Ensure that you have **Git**, **PHP**, **Node.js**, and **Docker** properly installed.
-- Make sure to activate the appropriate PHP drivers:
-  - **For PostgreSQL**: Uncomment `extension=pgsql` and `extension=pdo_pgsql` in `php.ini`.
-  - **For MySQL**: Uncomment `extension=mysqli` in `php.ini`.
-  - After making changes to `php.ini`, restart the server or PHP service.
+- **Laravel** (PHP backend)
+- **React + Vite + MUI** (frontend)
+- **Sanctum** (authentication)
+- **PostgreSQL** (via Docker)
+
